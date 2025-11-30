@@ -179,6 +179,17 @@ services:
     depends_on:
       - mysql
       - postgres
+  loopback:
+    image: alpine/socat
+    container_name: dev_loopback
+    restart: unless-stopped
+    command:
+      - TCP-LISTEN:8588,fork,reuseaddr
+      - TCP:nginx:80
+    network_mode: service:php
+    depends_on:
+      - php
+      - nginx
   nginx:
     image: quay.io/bitrix24/nginx:1.28.0-v3-alpine
     container_name: dev_nginx
@@ -212,6 +223,7 @@ services:
       dev:
         aliases:
           - nginx
+          - dev.bx
   push-sub:
     image: quay.io/bitrix24/push:3.1-v1-alpine
     container_name: dev_push_sub
