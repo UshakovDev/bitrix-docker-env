@@ -14,6 +14,7 @@
 www/*
 !www/.gitignore
 !www/README.md
+www-bindfs/
 
 # Временные файлы
 *.log
