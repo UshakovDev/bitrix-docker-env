@@ -17,6 +17,7 @@
 
 # Содержимое
 
+* [Права доступа к файлам и bindfs](#filepermissions)
 * [Docker и Docker Compose](#docker)
 * [docker-compose.yml](#dockercomposeyml)
 * [Пароли к базам данных MySQL и PostgreSQL](#databasespasswords)
@@ -295,6 +296,42 @@ docker compose exec nginx sh
 
 > [!CAUTION]
 > Внимание! При использовании операционных систем ALT 10.x или ALT 11.x для команд `Docker Compose` нужно использовать тире, пример `docker-compose ...`. Так как compose поставляется отдельным исполняемым файлом `/usr/local/bin/docker-compose`.
+
+<a id="filepermissions"></a>
+# Права доступа к файлам и bindfs
+
+Чтобы контейнеры Bitrix всегда работали с файлами от имени `bitrix:bitrix`, используется bindfs-монтаж каталога `www/` в `www-bindfs/`.
+
+### Установка
+
+```bash
+sudo apt install bindfs
+echo user_allow_other | sudo tee -a /etc/fuse.conf
+```
+
+### Монтирование и отмонтирование
+
+В корне проекта доступны скрипты:
+
+```bash
+sudo scripts/mount-www-bindfs.sh   # смонтировать www → www-bindfs
+sudo scripts/umount-www-bindfs.sh  # отмонтировать
+```
+
+Каталог `www-bindfs/` вручную создавать не нужно — скрипт сделает это автоматически. После монтирования можно сразу запускать `docker-compose up -d`.
+
+`mount-www-bindfs.sh` проверяет настройки FUSE, монтирует `www/` с владельцем `bitrix:bitrix` и задаёт права 664/2775, включая setgid на каталогах.
+
+### Работа с кодом
+
+- Открывайте проект в редакторе из каталога `www-bindfs/` — именно он подключён в `docker-compose.yml` (`./www-bindfs:/opt/www/`).
+- После монтирования перезапускайте сервисы:
+  ```bash
+  docker-compose restart php nginx cron
+  ```
+
+> [!IMPORTANT]
+> Если редактировать файлы в исходном каталоге `www/`, bindfs не задействуется, и права останутся как в ОС. Всегда работайте в `www-bindfs/`.
 
 <a id="iporurls"></a>
 # Адресация
