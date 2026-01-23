@@ -318,6 +318,8 @@ sudo scripts/mount-www-bindfs.sh   # смонтировать www → www-bindfs
 sudo scripts/umount-www-bindfs.sh  # отмонтировать
 ```
 
+Подробная мини‑документация по этим скриптам: [scripts/README.md](scripts/README.md).
+
 Каталог `www-bindfs/` вручную создавать не нужно — скрипт сделает это автоматически. После монтирования можно сразу запускать `docker-compose up -d`.
 
 `mount-www-bindfs.sh` проверяет настройки FUSE, монтирует `www/` с владельцем `bitrix:bitrix` и задаёт права 664/2775, включая setgid на каталогах.
