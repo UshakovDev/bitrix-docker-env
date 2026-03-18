@@ -1,6 +1,10 @@
 # Секретные файлы с паролями и ключами
 .env_sql
 .env_push
+rootCA.cert.pem
+rootCA.cert.crt
+intermediateCA.cert.pem
+intermediateCA.cert.crt
 
 # Остальные .env файлы можно коммитить (не содержат секретов)
 # .env - только настройки проекта

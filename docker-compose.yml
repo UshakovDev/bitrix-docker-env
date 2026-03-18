@@ -176,6 +176,8 @@ services:
       dev:
         aliases:
           - php
+    extra_hosts:
+      - "dev.bx:127.0.0.1"
     depends_on:
       - mysql
       - postgres
@@ -186,6 +188,17 @@ services:
     command:
       - TCP-LISTEN:8588,fork,reuseaddr
       - TCP:nginx:80
+    network_mode: service:php
+    depends_on:
+      - php
+      - nginx
+  loopback-secure:
+    image: alpine/socat
+    container_name: dev_loopback_secure
+    restart: unless-stopped
+    command:
+      - TCP-LISTEN:8589,fork,reuseaddr
+      - TCP:nginx:443
     network_mode: service:php
     depends_on:
       - php
