@@ -380,8 +380,10 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    ports:
-      - "80:80"
+    # Порт 80 нужен только для выпуска сертификатов по реальному домену.
+    # Раскомментируйте, когда освободите порт 80 на хосте.
+#    ports:
+#      - "80:80"
     volumes:
       - ssl_data:/ssl/
     init: true

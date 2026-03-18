@@ -103,8 +103,8 @@ docker-compose exec php cat /opt/www/bitrix/.settings.php
 
 1. Запустить оболочку внутри контейнера MySQL и открыть клиент `mysql` под пользователем `root`:
 
-   ```bash
-   docker-compose exec mysql bash -c "mysql -u root -p"
+   ```
+   docker-compose exec -it mysql mysql -u root -p
    ```
 
 2. Когда контейнер запросит пароль — ввести пароль из `.env_sql` (значение `MYSQL_ROOT_PASSWORD`) и нажать Enter.
