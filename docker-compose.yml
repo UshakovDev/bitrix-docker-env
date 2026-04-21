@@ -149,12 +149,17 @@ services:
     #image: quay.io/bitrix24/php:8.4.15-fpm-v1-alpine
     container_name: dev_php
     restart: unless-stopped
+    # Мастер от root: entrypoint может update-ca-certificates; воркеры — bitrix (www.conf).
+    user: "0:0"
+    entrypoint: ["/usr/local/bin/docker-entrypoint-trust-ssl.sh"]
+    command: ["php-fpm"]
     env_file:
       - .env
       - .env_php
 #    ports:
 #      - "9000:9000"
     volumes:
+      - ./confs/php82/docker-entrypoint-trust-ssl.sh:/usr/local/bin/docker-entrypoint-trust-ssl.sh:ro
       - ./confs/php82/etc/:/usr/local/etc/
       #- ./confs/php83/etc/:/usr/local/etc/
       #- ./confs/php84/etc/:/usr/local/etc/
@@ -170,6 +175,10 @@ services:
       - no-new-privileges
     cap_drop:
       - ALL
+    # Мастер php-fpm от root переключает воркеры на bitrix (setuid/setgid к пулу).
+    cap_add:
+      - SETUID
+      - SETGID
     tmpfs:
       - /tmp:noexec,nodev,nosuid
       - /var/tmp:noexec,nodev,nosuid
