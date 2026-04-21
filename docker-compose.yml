@@ -125,6 +125,8 @@ services:
     volumes:
       - mysql_log_data:/var/log/mysql
       - mysql_lib_data:/var/lib/mysql
+      - ./confs/mysql/etc/my.cnf:/etc/my.cnf:ro
+      - ./confs/mysql/etc/my.cnf.d/:/etc/my.cnf.d/:ro
     init: true
     cgroup: private
     security_opt:
